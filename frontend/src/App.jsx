@@ -4,20 +4,33 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import axios from "axios";
 
-function App() {
-  const [message, setMessage] = useState('')
-  const baseUrl = "http://localhost:5000/"
 
+function App() {
+  const baseUrl = "http://localhost:5000"
+  const [employees,setEmployees] = useState([])
+
+  const fetchEmployees = async()=>{
+    console.log("use effect")
+    const response = await axios.get(`${baseUrl}/employees`)
+    setEmployees(response.data)
+  }
+
+  //get all employees
   useEffect(()=>{
-    axios.get(`${baseUrl}`)
-    .then(response=>setMessage(response.data))
-    .catch(error=>console.error(error))
+    fetchEmployees()
   },[])
 
   return (
     <div>
-      <h1>MERN Stack App</h1>
-      <p>{message}</p>
+      <h1>Employee Management App</h1>
+      <h2>Employee List</h2>
+      <ul>
+        {employees.map(employee=>{ return (
+          <li key={employee._id}>
+            {employee.name} - {employee.position} - {employee.level}
+          </li>
+        )})}
+      </ul>
     </div>
   )
 }
