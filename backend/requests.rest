@@ -1,0 +1,14 @@
+@baseurl = http://localhost:5000
+
+### Get All Employees
+GET {{baseurl}}/employees HTTP/1.1
+
+###
+POST {{baseurl}}/employees HTTP/1.1
+Content-Type: application/json
+
+{
+    "name" : "Jane Doe",
+    "position" : "Software Engineer",
+    "level" : "Intern"
+}
