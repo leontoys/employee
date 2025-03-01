@@ -16,9 +16,9 @@ const employeeSchema = new mongoose.Schema({
 const Employee = mongoose.model('Employee', employeeSchema)
 
 const employee = new Employee({
-  name: "Jane Doe",
-  position: "Frontend Developer",
-  level: "Juniori"
+  name: "John Doe",
+  position: "Fullstack Developer",
+  level: "Senior"
 })
 
 employee.save().then(result => {
