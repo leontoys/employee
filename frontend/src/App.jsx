@@ -10,9 +10,13 @@ function App() {
   const [employees,setEmployees] = useState([])
 
   const fetchEmployees = async()=>{
-    console.log("use effect")
-    const response = await axios.get(`${baseUrl}/employees`)
-    setEmployees(response.data)
+    try {
+      const response = await axios.get(`${baseUrl}/employees`)
+      setEmployees(response.data)    } 
+    catch (error) {
+      console.error(error)
+    }
+
   }
 
   //get all employees
