@@ -22,7 +22,7 @@ mongoose.connect(url)
 
 //base
 app.get('/',(req,res)=>{
-    res.send('Hello')
+    res.send('Hello from NodeJS')
 })
 
 //start server
