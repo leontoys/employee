@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "mongo db employee app",
+  "keywords": [
+    "mern",
+    "stack"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "employee"
+  },
+  "license": "ISC",
+  "author": "leon",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
