@@ -66,3 +66,16 @@
   text-align: right;
   margin-right: 10px;
 }
+
+.button-group {
+  display: flex;
+  justify-content: flex-start; 
+  gap: 10px; 
+  margin-top: 10px;
+}
+
+.form-container button {
+  padding: 8px 12px;
+}
+
+

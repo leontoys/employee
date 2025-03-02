@@ -6,11 +6,11 @@ import axios from "axios";
 
 
 function App() {
-  const baseUrl = ""//"http://localhost:5000"
+  const baseUrl = ""//"http://localhost:5001"
   const [employees, setEmployees] = useState([])
   const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" })
   const [editingEmployee, setEditingEmployee] = useState(null)
-  const [showAddForm,setShowAddForm] = useState(false)
+  const [showAddForm, setShowAddForm] = useState(false)
 
   //get all employees
   const fetchEmployees = async () => {
@@ -92,9 +92,13 @@ function App() {
               onChange={(e) => setNewEmployee({ ...newEmployee, level: e.target.value })}
             ></input>
           </div>
-          <button type="submit">Save</button>
-          <button onClick={()=>{ setShowAddForm(false)
-            setNewEmployee(null)}}>Cancel</button>
+          <div className="button-group">
+            <button type="submit">Save</button>
+            <button onClick={() => {
+              setShowAddForm(false)
+              setNewEmployee(null)
+            }}>Cancel</button>
+          </div>
         </form>
       </div>)}
       {editingEmployee && (<div className='form-container'>
@@ -121,11 +125,13 @@ function App() {
               onChange={(e) => setEditingEmployee({ ...editingEmployee, level: e.target.value })}
             ></input>
           </div>
-          <button type="submit">Save Changes</button>
-          <button onClick={()=>setEditingEmployee(null)}>Cancel</button>
+          <div className="button-group">
+            <button type="submit">Save Changes</button>
+            <button onClick={() => setEditingEmployee(null)}>Cancel</button>
+          </div>
         </form>
       </div>)}
-      {!showAddForm && !editingEmployee && (<button onClick={()=>setShowAddForm(true)}>Add New Employee</button>)}
+      {!showAddForm && !editingEmployee && (<button onClick={() => setShowAddForm(true)}>Add New Employee</button>)}
       <div>
         <h2>Employee List</h2>
         <table className='employee-table'>
@@ -138,14 +144,14 @@ function App() {
             </tr>
           </thead>
           <tbody>
-            {employees.map(employee=>(
+            {employees.map(employee => (
               <tr key={employee._id}>
                 <td>{employee.name}</td>
                 <td>{employee.position}</td>
                 <td>{employee.level}</td>
                 <td>
-                  <button onClick={()=>setEditingEmployee(employee)}>Edit</button>
-                  <button onClick={()=>deleteEmployee(employee._id)}>Delete</button>
+                  <button onClick={() => setEditingEmployee(employee)}>Edit</button>
+                  <button onClick={() => deleteEmployee(employee._id)}>Delete</button>
                 </td>
               </tr>
             ))}
