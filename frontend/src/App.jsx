@@ -68,24 +68,24 @@ function App() {
   return (
     <div>
       <h1>Employee Management App</h1>
-      {showAddForm && (<div>
+      {showAddForm && (<div className='form-container'>
         <h2>Add New Employee</h2>
         <form onSubmit={addEmployee}>
-          <div>
+          <div className='form-group'>
             <label>Name : </label>
             <input
               value={newEmployee.name}
               onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
             ></input>
           </div>
-          <div>
+          <div className='form-group'>
             <label>Position : </label>
             <input
               value={newEmployee.position}
               onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })}
             ></input>
           </div>
-          <div>
+          <div className='form-group'>
             <label>Level : </label>
             <input
               value={newEmployee.level}
@@ -97,24 +97,24 @@ function App() {
             setNewEmployee(null)}}>Cancel</button>
         </form>
       </div>)}
-      {editingEmployee && (<div>
+      {editingEmployee && (<div className='form-container'>
         <h2>Edit Employee</h2>
         <form onSubmit={editEmployee}>
-          <div>
+          <div className='form-group'>
             <label>Name : </label>
             <input
               value={editingEmployee.name}
               onChange={(e) => setEditingEmployee({ ...editingEmployee, name: e.target.value })}
             ></input>
           </div>
-          <div>
+          <div className='form-group'>
             <label>Position : </label>
             <input
               value={editingEmployee.position}
               onChange={(e) => setEditingEmployee({ ...editingEmployee, position: e.target.value })}
             ></input>
           </div>
-          <div>
+          <div className='form-group'>
             <label>Level : </label>
             <input
               value={editingEmployee.level}
@@ -125,20 +125,32 @@ function App() {
           <button onClick={()=>setEditingEmployee(null)}>Cancel</button>
         </form>
       </div>)}
-      {!showAddForm && (<button onClick={()=>setShowAddForm(true)}>Add New Employee</button>)}
+      {!showAddForm && !editingEmployee && (<button onClick={()=>setShowAddForm(true)}>Add New Employee</button>)}
       <div>
         <h2>Employee List</h2>
-        <ul>
-          {employees.map(employee => {
-            return (
-              <li key={employee._id}>
-                {employee.name} - {employee.position} - {employee.level}
-                <button onClick={() => setEditingEmployee(employee)}>Edit</button>
-                <button onClick={()=>deleteEmployee(employee._id)}>Delete</button>
-              </li>
-            )
-          })}
-        </ul>
+        <table className='employee-table'>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Position</th>
+              <th>Level</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {employees.map(employee=>(
+              <tr key={employee._id}>
+                <td>{employee.name}</td>
+                <td>{employee.position}</td>
+                <td>{employee.level}</td>
+                <td>
+                  <button onClick={()=>setEditingEmployee(employee)}>Edit</button>
+                  <button onClick={()=>deleteEmployee(employee._id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   )
