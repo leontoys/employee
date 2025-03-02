@@ -6,7 +6,7 @@ import axios from "axios";
 
 
 function App() {
-  const baseUrl = "http://localhost:5000"
+  const baseUrl = ""//"http://localhost:5000"
   const [employees, setEmployees] = useState([])
   const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" })
   const [editingEmployee, setEditingEmployee] = useState(null)
