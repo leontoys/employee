@@ -10,7 +10,9 @@ function App() {
   const [employees, setEmployees] = useState([])
   const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" })
   const [editingEmployee, setEditingEmployee] = useState(null)
+  const [showAddForm,setShowAddForm] = useState(false)
 
+  //get all employees
   const fetchEmployees = async () => {
     try {
       const response = await axios.get(`${baseUrl}/employees`)
@@ -22,6 +24,7 @@ function App() {
 
   }
 
+  //add new employee
   const addEmployee = async (event) => {
     event.preventDefault()
     try {
@@ -33,6 +36,7 @@ function App() {
     }
   }
 
+  //edit employee
   const editEmployee = async (event) => {
     event.preventDefault()
     try {
@@ -45,7 +49,18 @@ function App() {
     }
   }
 
-  //get all employees
+  //delete employee
+  const deleteEmployee = async (id) => {
+    event.preventDefault()
+    try {
+      const response = await axios.delete(`${baseUrl}/employees/${id}`)
+      setEmployees(employees.filter(emp => (emp._id !== id)))
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  //get all employees - on page load
   useEffect(() => {
     fetchEmployees()
   }, [])
@@ -53,7 +68,7 @@ function App() {
   return (
     <div>
       <h1>Employee Management App</h1>
-      {!editingEmployee && (<div>
+      {showAddForm && (<div>
         <h2>Add New Employee</h2>
         <form onSubmit={addEmployee}>
           <div>
@@ -77,7 +92,9 @@ function App() {
               onChange={(e) => setNewEmployee({ ...newEmployee, level: e.target.value })}
             ></input>
           </div>
-          <button type="submit">Add Employee</button>
+          <button type="submit">Save</button>
+          <button onClick={()=>{ setShowAddForm(false)
+            setNewEmployee(null)}}>Cancel</button>
         </form>
       </div>)}
       {editingEmployee && (<div>
@@ -104,9 +121,11 @@ function App() {
               onChange={(e) => setEditingEmployee({ ...editingEmployee, level: e.target.value })}
             ></input>
           </div>
-          <button type="submit">Edit Employee</button>
+          <button type="submit">Save Changes</button>
+          <button onClick={()=>setEditingEmployee(null)}>Cancel</button>
         </form>
       </div>)}
+      {!showAddForm && (<button onClick={()=>setShowAddForm(true)}>Add New Employee</button>)}
       <div>
         <h2>Employee List</h2>
         <ul>
@@ -115,6 +134,7 @@ function App() {
               <li key={employee._id}>
                 {employee.name} - {employee.position} - {employee.level}
                 <button onClick={() => setEditingEmployee(employee)}>Edit</button>
+                <button onClick={()=>deleteEmployee(employee._id)}>Delete</button>
               </li>
             )
           })}
