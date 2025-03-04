@@ -1,165 +1,105 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import axios from "axios";
-
+// App.jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import EmployeeForm from './components/EmployeeForm';
+import EmployeeList from './components/EmployeeList';
+import './App.css';
 
 function App() {
-  const baseUrl = ""//"http://localhost:5001"
-  const [employees, setEmployees] = useState([])
-  const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" })
-  const [editingEmployee, setEditingEmployee] = useState(null)
-  const [showAddForm, setShowAddForm] = useState(false)
+  const baseUrl =  "http://localhost:5001" //""; //
+  const [employees, setEmployees] = useState([]);
+  const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" });
+  const [editingEmployee, setEditingEmployee] = useState(null);
+  const [showAddForm, setShowAddForm] = useState(false);
 
-  //get all employees
   const fetchEmployees = async () => {
     try {
-      const response = await axios.get(`${baseUrl}/employees`)
-      setEmployees(response.data)
+      const response = await axios.get(`${baseUrl}/employees`);
+      setEmployees(response.data);
+    } catch (error) {
+      console.error(error);
     }
-    catch (error) {
-      console.error(error)
-    }
+  };
 
-  }
-
-  //add new employee
   const addEmployee = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const response = await axios.post(`${baseUrl}/employees`, newEmployee)
-      setEmployees(employees.concat(response.data))//add new employee
-      setNewEmployee({ name: "", position: "", level: "" })
+      const response = await axios.post(`${baseUrl}/employees`, newEmployee);
+      setEmployees(employees.concat(response.data));
+      setNewEmployee({ name: "", position: "", level: "" });
+      setShowAddForm(false);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  //edit employee
   const editEmployee = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      console.log("editing")
-      const response = await axios.patch(`${baseUrl}/employees/${editingEmployee._id}`, editingEmployee)
-      setEmployees(employees.map(emp => (emp._id === editingEmployee._id ? response.data : emp))); // Update the employee list
-      setEditingEmployee(null)
+      const response = await axios.patch(`${baseUrl}/employees/${editingEmployee._id}`, editingEmployee);
+      setEmployees(employees.map(emp => (emp._id === editingEmployee._id ? response.data : emp)));
+      setEditingEmployee(null);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  //delete employee
   const deleteEmployee = async (id) => {
-    event.preventDefault()
     try {
-      const response = await axios.delete(`${baseUrl}/employees/${id}`)
-      setEmployees(employees.filter(emp => (emp._id !== id)))
+      await axios.delete(`${baseUrl}/employees/${id}`);
+      setEmployees(employees.filter(emp => (emp._id !== id)));
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  //get all employees - on page load
   useEffect(() => {
-    fetchEmployees()
-  }, [])
+    fetchEmployees();
+  }, []);
 
   return (
     <div>
       <h1>Employee Management App</h1>
-      {showAddForm && (<div className='form-container'>
-        <h2>Add New Employee</h2>
-        <form onSubmit={addEmployee}>
-          <div className='form-group'>
-            <label>Name : </label>
-            <input
-              value={newEmployee.name}
-              onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
-            ></input>
-          </div>
-          <div className='form-group'>
-            <label>Position : </label>
-            <input
-              value={newEmployee.position}
-              onChange={(e) => setNewEmployee({ ...newEmployee, position: e.target.value })}
-            ></input>
-          </div>
-          <div className='form-group'>
-            <label>Level : </label>
-            <input
-              value={newEmployee.level}
-              onChange={(e) => setNewEmployee({ ...newEmployee, level: e.target.value })}
-            ></input>
-          </div>
-          <div className="button-group">
-            <button type="submit">Save</button>
-            <button onClick={() => {
-              setShowAddForm(false)
-              setNewEmployee(null)
-            }}>Cancel</button>
-          </div>
-        </form>
-      </div>)}
-      {editingEmployee && (<div className='form-container'>
-        <h2>Edit Employee</h2>
-        <form onSubmit={editEmployee}>
-          <div className='form-group'>
-            <label>Name : </label>
-            <input
-              value={editingEmployee.name}
-              onChange={(e) => setEditingEmployee({ ...editingEmployee, name: e.target.value })}
-            ></input>
-          </div>
-          <div className='form-group'>
-            <label>Position : </label>
-            <input
-              value={editingEmployee.position}
-              onChange={(e) => setEditingEmployee({ ...editingEmployee, position: e.target.value })}
-            ></input>
-          </div>
-          <div className='form-group'>
-            <label>Level : </label>
-            <input
-              value={editingEmployee.level}
-              onChange={(e) => setEditingEmployee({ ...editingEmployee, level: e.target.value })}
-            ></input>
-          </div>
-          <div className="button-group">
-            <button type="submit">Save Changes</button>
-            <button onClick={() => setEditingEmployee(null)}>Cancel</button>
-          </div>
-        </form>
-      </div>)}
-      {!showAddForm && !editingEmployee && (<button onClick={() => setShowAddForm(true)}>Add New Employee</button>)}
-      <div>
-        <h2>Employee List</h2>
-        <table className='employee-table'>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Position</th>
-              <th>Level</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {employees.map(employee => (
-              <tr key={employee._id}>
-                <td>{employee.name}</td>
-                <td>{employee.position}</td>
-                <td>{employee.level}</td>
-                <td>
-                  <button onClick={() => setEditingEmployee(employee)}>Edit</button>
-                  <button onClick={() => deleteEmployee(employee._id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      {showAddForm && (
+        <EmployeeForm
+          employee={{
+            name: newEmployee.name,
+            position: newEmployee.position,
+            level: newEmployee.level,
+            setName: (value) => setNewEmployee({ ...newEmployee, name: value }),
+            setPosition: (value) => setNewEmployee({ ...newEmployee, position: value }),
+            setLevel: (value) => setNewEmployee({ ...newEmployee, level: value }),
+          }}
+          onSubmit={addEmployee}
+          onCancel={() => setShowAddForm(false)}
+          isEditing={false}
+        />
+      )}
+      {editingEmployee && (
+        <EmployeeForm
+          employee={{
+            name: editingEmployee.name,
+            position: editingEmployee.position,
+            level: editingEmployee.level,
+            setName: (value) => setEditingEmployee({ ...editingEmployee, name: value }),
+            setPosition: (value) => setEditingEmployee({ ...editingEmployee, position: value }),
+            setLevel: (value) => setEditingEmployee({ ...editingEmployee, level: value }),
+          }}
+          onSubmit={editEmployee}
+          onCancel={() => setEditingEmployee(null)}
+          isEditing={true}
+        />
+      )}
+      {!showAddForm && !editingEmployee && (
+        <button onClick={() => setShowAddForm(true)}>Add New Employee</button>
+      )}
+      <EmployeeList
+        employees={employees}
+        onEdit={setEditingEmployee}
+        onDelete={deleteEmployee}
+      />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
