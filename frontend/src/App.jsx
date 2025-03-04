@@ -6,7 +6,7 @@ import EmployeeList from './components/EmployeeList';
 import './App.css';
 
 function App() {
-  const baseUrl =  "http://localhost:5001" //""; //
+  const baseUrl =  "" //"http://localhost:5001" // ""; //
   const [employees, setEmployees] = useState([]);
   const [newEmployee, setNewEmployee] = useState({ name: "", position: "", level: "" });
   const [editingEmployee, setEditingEmployee] = useState(null);
